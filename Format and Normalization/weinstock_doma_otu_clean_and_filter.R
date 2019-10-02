@@ -1,0 +1,103 @@
+### Options and libraries
+options(stringsAsFactors = FALSE)
+library(tidyverse)
+library(qtl2)
+
+
+
+
+
+### Read in OTU data
+taxa <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/otu_taxa_rdpc0.8.tsv')
+otu  <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/otu_table_by_otutab.tsv')
+
+
+
+
+
+
+
+### Editing taxa table
+taxa <- taxa %>% 
+          rename(OTU = X) %>%
+          mutate(OTU = gsub('_', '-', OTU)) %>%
+          select(OTU, genus, family, order, class, phylum, domain)
+taxa <- apply(taxa, 2, function(x) gsub('_', ' ', x))
+taxa <- as.data.frame(taxa)
+
+
+
+
+
+
+
+
+### Editing OTU table
+otu <- otu %>%
+        mutate(X.OTU.ID = gsub('_', '-', X.OTU.ID)) %>%
+        column_to_rownames('X.OTU.ID')
+  
+
+orig.id <- colnames(otu)
+colnames(otu) <- gsub('DOMA_J00[0-9][A-Z][A-Z]_1_ST_T0_B0_0000_|DOMA_J00[0-9][A-Z][0-9]_1_ST_T0_B0_0000_|DOMA_J00[0-9][0-9][A-Z]_1_ST_T0_B0_0000_','',colnames(otu))
+colnames(otu) <- gsub('(DO_[0-9][0-9][0-9][0-9]).*', '\\1', colnames(otu))
+colnames(otu) <- gsub('(D0_[0-9][0-9][0-9][0-9]).*', '\\1', colnames(otu))
+colnames(otu) <- gsub('D0', 'DO', colnames(otu))
+
+
+
+
+
+
+
+
+### Removing duplicates. Keep the one with with highest abundance according to Dong-Binh
+dups <- unique(colnames(otu)[duplicated(colnames(otu))])
+keep <- rep(TRUE, ncol(otu))
+for(i in dups){
+  
+    wh <- which(colnames(otu) == i)
+    print(wh)
+    lessZeros <- which.min(colSums(otu[,wh] == 0))
+    totalSum  <- which.max(colSums(otu[,wh]))
+    
+
+    keep[wh[-totalSum]] <- FALSE
+}
+otu <- otu[,keep]
+orig.id <- orig.id[keep]
+
+
+
+
+
+
+
+
+### Remove OTUs with prevalence > 5%
+otu  <- otu[which(rowSums(otu > 0) > (ncol(otu) * 0.05)),]
+taxa <- taxa %>% filter(OTU %in% rownames(otu))
+
+
+### Reorder
+otu <- otu[taxa$OTU, order(colnames(otu))]
+colnames(otu) <- gsub('_', '.', colnames(otu))
+otu <- t(otu)
+
+
+
+
+
+
+
+
+
+
+### Save
+saveRDS(taxa, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_cleaned_filtered.rds')
+saveRDS(otu, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned_filtered.rds')
+
+
+
+
+
