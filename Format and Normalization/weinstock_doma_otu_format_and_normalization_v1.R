@@ -42,7 +42,7 @@ samples <- samples %>%
 
 
 
-### Normalize OTU
+### Normalize OTU. Adding 1 so I can compute geometric mean according to Dong-binh
 form <- formula(~ 1)
 dds  <- DESeqDataSetFromMatrix(countData = t(otu + 1), colData  = samples, design = form) 
 vst  <- t(as.matrix(assay(varianceStabilizingTransformation(dds))))
@@ -119,7 +119,6 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), taxa$OTU),
 
 
 
-### QTL viewer format
 dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                          annot.samples   = as_tibble(samples),
                          covar.matrix    = as.matrix(covar),
