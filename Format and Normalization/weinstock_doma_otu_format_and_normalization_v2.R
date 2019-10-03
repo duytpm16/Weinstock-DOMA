@@ -22,15 +22,15 @@ taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/
 
 ### Create sample annotations
 samples <- samples %>%
-             filter(Cohort == 'Cross-Sectional') %>%
-             filter(!grepl('HDO-', Mouse.ID)) %>%
-             select(Mouse.ID, Sex, DOB, Generation, Cohort.Age, Coat.Color, Wean.Date, DOD, Age.Death, From.Cage, JCMS.Cage, Cage, Ear.Notch, Cohort) %>%
-             mutate(Mouse.ID = gsub('-', '.', Mouse.ID)) %>%
-             left_join(y = chrY_M %>% select(X, chrM, chrY) %>% dplyr::rename(Mouse.ID = X), by = 'Mouse.ID') %>%
-             filter(Mouse.ID %in% rownames(otu)) %>%
-             mutate(Sex = factor(Sex), Generation = factor(Generation)) %>%
-             `colnames<-`(tolower(colnames(.))) %>%
-             distinct()
+              filter(Cohort == 'Cross-Sectional') %>%
+              filter(!grepl('HDO-', Mouse.ID)) %>%
+              select(Mouse.ID, Sex, DOB, Generation, Cohort.Age, Coat.Color, Wean.Date, DOD, Age.Death, From.Cage, JCMS.Cage, Cage, Ear.Notch, Cohort) %>%
+              mutate(Mouse.ID = gsub('-', '.', Mouse.ID)) %>%
+              left_join(y = chrY_M %>% select(X, chrM, chrY) %>% dplyr::rename(Mouse.ID = X), by = 'Mouse.ID') %>%
+              filter(Mouse.ID %in% rownames(otu)) %>%
+              mutate(Sex = factor(Sex), Generation = factor(Generation)) %>%
+              `colnames<-`(tolower(colnames(.))) %>%
+              distinct()
 
 
 
@@ -40,8 +40,7 @@ samples <- samples %>%
 
 
 ### Normalize OTU
-norm <- otu + 1
-norm <- apply(norm, 2, function(x) x / sum(x))
+norm <- apply(otu + 1, 2, function(x) x / sum(x))
 norm <- log(norm)
 
 
@@ -114,7 +113,7 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), taxa$OTU),
 
 
 
-
+### QTL viewer format
 dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                          annot.samples   = as_tibble(samples),
                          covar.matrix    = as.matrix(covar),
@@ -134,9 +133,9 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
 ### Map as dataframe
 markers <- map_list_to_df(map_list = map)
 markers <- markers %>% 
-            select(marker, chr, pos) %>% 
-            dplyr::rename(marker.id = marker) %>%
-            as_tibble()
+              select(marker, chr, pos) %>% 
+              dplyr::rename(marker.id = marker) %>%
+              as_tibble()
 
 
 
