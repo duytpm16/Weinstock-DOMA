@@ -11,7 +11,7 @@ library(qtl2)
 
 
 ### Load data
-load('~/Desktop/Weinstock_DOMA/Genotypes/JAC_crosssectional_genoprobs_20180618.Rdata')
+load('~/Desktop/Weinstock_DOMA/Genotypes/DODB/qtl2/JAC_megaMUGA_genoprobs_qtl2.RData')
 samples <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/DO_CrossSectional_Population.csv')
 chrY_M  <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/JAC_crosssectional_sex_chrM_Y_20180618.csv')
 otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned_filtered.rds')
@@ -44,7 +44,8 @@ samples <- samples %>%
 
 ### Normalize OTU. Adding 1 so I can compute geometric mean according to Dong-binh
 form <- formula(~ 1)
-dds  <- DESeqDataSetFromMatrix(countData = t(otu + 1), colData  = samples, design = form) 
+dds  <- DESeqDataSetFromMatrix(countData = t(otu), colData  = samples, design = form) 
+dds  <- estimateSizeFactors(dds, type = 'poscounts')
 vst  <- t(as.matrix(assay(varianceStabilizingTransformation(dds))))
 
 
@@ -112,13 +113,17 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), taxa$OTU),
                               is.derived  = FALSE,
                               omit        = FALSE,
                               use.covar   = c(rep(NA, ncol(samples)), rep('sex:cohort.age:generation', nrow(taxa))),
-                              transformation = c(rep(NA, ncol(samples)), rep('log', nrow(taxa))))
+                              transformation = c(rep(NA, ncol(samples)), rep('rankz', nrow(taxa))))
 
 
 
 
 
 
+
+
+
+### QTL viewer format
 dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                          annot.samples   = as_tibble(samples),
                          covar.matrix    = as.matrix(covar),
@@ -135,12 +140,9 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
 
 
 
-### Map as dataframe
-markers <- map_list_to_df(map_list = map)
-markers <- markers %>% 
-              select(marker, chr, pos) %>% 
-              dplyr::rename(marker.id = marker) %>%
-              as_tibble()
+
+### Markers as tibble
+markers <- as_tibble(markers)
 
 
 
@@ -149,7 +151,7 @@ markers <- markers %>%
 
 
 ### Reducing genoprobs for lower memory. Then compute kinship
-genoprobs <- probs_qtl2_to_doqtl(probs = probs)
+genoprobs <- probs_qtl2_to_doqtl(probs = geno  probs)
 genoprobs <- genoprobs[dimnames(genoprobs)[[1]] %in% samples$mouse.id,,]
 genoprobs <- probs_doqtl_to_qtl2(probs = genoprobs, map = as.data.frame(markers), marker_column = 'marker.id', pos_column = 'pos')
 K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
@@ -159,6 +161,12 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 
 
 
+
+
+
 ### Save
 rm(list = ls()[!grepl('dataset[.]|K|map|markers|genoprobs', ls())])
 save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
+
+
+
