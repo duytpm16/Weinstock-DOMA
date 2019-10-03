@@ -39,11 +39,12 @@ samples <- samples %>%
 
 
 
-### Normalize OTU
+### Normalize OTU by Hoan's pipeline.
 norm <- apply(otu, 2, function(x) x / sum(x))
 norm <- log(norm + 1)
 
 
+              
 
 
 
