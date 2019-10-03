@@ -1,8 +1,11 @@
+### Options and libraries
 options(stringsAsFactors = FALSE)
 library(qtl2convert)
 library(tidyverse)
 library(DESeq2)
 library(qtl2)
+
+
 
 
 
@@ -19,17 +22,18 @@ taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/
 
 
 
+
 ### Create sample annotations
 samples <- samples %>%
-             filter(Cohort == 'Cross-Sectional') %>%
-             filter(!grepl('HDO-', Mouse.ID)) %>%
-             select(Mouse.ID, Sex, DOB, Generation, Cohort.Age, Coat.Color, Wean.Date, DOD, Age.Death, From.Cage, JCMS.Cage, Cage, Ear.Notch, Cohort) %>%
-             mutate(Mouse.ID = gsub('-', '.', Mouse.ID)) %>%
-             left_join(y = chrY_M %>% select(X, chrM, chrY) %>% dplyr::rename(Mouse.ID = X), by = 'Mouse.ID') %>%
-             filter(Mouse.ID %in% rownames(otu)) %>%
-             mutate(Sex = factor(Sex), Generation = factor(Generation)) %>%
-             `colnames<-`(tolower(colnames(.))) %>%
-             distinct()
+              filter(Cohort == 'Cross-Sectional') %>%
+              filter(!grepl('HDO-', Mouse.ID)) %>%
+              select(Mouse.ID, Sex, DOB, Generation, Cohort.Age, Coat.Color, Wean.Date, DOD, Age.Death, From.Cage, JCMS.Cage, Cage, Ear.Notch, Cohort) %>%
+              mutate(Mouse.ID = gsub('-', '.', Mouse.ID)) %>%
+              left_join(y = chrY_M %>% select(X, chrM, chrY) %>% dplyr::rename(Mouse.ID = X), by = 'Mouse.ID') %>%
+              filter(Mouse.ID %in% rownames(otu)) %>%
+              mutate(Sex = factor(Sex), Generation = factor(Generation)) %>%
+              `colnames<-`(tolower(colnames(.))) %>%
+              distinct()
 
 
 
@@ -39,10 +43,8 @@ samples <- samples %>%
 
 
 ### Normalize OTU
-otu_1 <- otu + 1
-
 form <- formula(~ 1)
-dds  <- DESeqDataSetFromMatrix(countData = t(otu_1), colData  = samples, design = form) 
+dds  <- DESeqDataSetFromMatrix(countData = t(otu + 1), colData  = samples, design = form) 
 vst  <- t(as.matrix(assay(varianceStabilizingTransformation(dds))))
 
 
@@ -117,6 +119,7 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), taxa$OTU),
 
 
 
+### QTL viewer format
 dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                          annot.samples   = as_tibble(samples),
                          covar.matrix    = as.matrix(covar),
@@ -136,9 +139,9 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
 ### Map as dataframe
 markers <- map_list_to_df(map_list = map)
 markers <- markers %>% 
-            select(marker, chr, pos) %>% 
-            dplyr::rename(marker.id = marker) %>%
-            as_tibble()
+              select(marker, chr, pos) %>% 
+              dplyr::rename(marker.id = marker) %>%
+              as_tibble()
 
 
 
