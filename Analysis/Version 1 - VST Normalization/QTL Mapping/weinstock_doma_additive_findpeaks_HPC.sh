@@ -9,7 +9,7 @@ module load R/3.5.1
 
 
 viewer_data='weinstock_doma_viewer_v1.Rdata'
-scan1_mat='doma_otu_additive_scan.rds'
+scan1_mat='doma_otu_additive_scan_v1.rds'
 dataset_expr='dataset.doma.otu|data|rz'
 thr='6'
 num_cores='8'
