@@ -22,15 +22,15 @@ taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/
 
 ### Create sample annotations
 samples <- samples %>%
-  filter(Cohort == 'Cross-Sectional') %>%
-  filter(!grepl('HDO-', Mouse.ID)) %>%
-  select(Mouse.ID, Sex, DOB, Generation, Cohort.Age, Coat.Color, Wean.Date, DOD, Age.Death, From.Cage, JCMS.Cage, Cage, Ear.Notch, Cohort) %>%
-  mutate(Mouse.ID = gsub('-', '.', Mouse.ID)) %>%
-  left_join(y = chrY_M %>% select(X, chrM, chrY) %>% dplyr::rename(Mouse.ID = X), by = 'Mouse.ID') %>%
-  filter(Mouse.ID %in% rownames(otu)) %>%
-  mutate(Sex = factor(Sex), Generation = factor(Generation)) %>%
-  `colnames<-`(tolower(colnames(.))) %>%
-  distinct()
+              filter(Cohort == 'Cross-Sectional') %>%
+              filter(!grepl('HDO-', Mouse.ID)) %>%
+              select(Mouse.ID, Sex, DOB, Generation, Cohort.Age, Coat.Color, Wean.Date, DOD, Age.Death, From.Cage, JCMS.Cage, Cage, Ear.Notch, Cohort) %>%
+              mutate(Mouse.ID = gsub('-', '.', Mouse.ID)) %>%
+              left_join(y = chrY_M %>% select(X, chrM, chrY) %>% dplyr::rename(Mouse.ID = X), by = 'Mouse.ID') %>%
+              filter(Mouse.ID %in% rownames(otu)) %>%
+              mutate(Sex = factor(Sex), Generation = factor(Generation)) %>%
+              `colnames<-`(tolower(colnames(.))) %>%
+              distinct()
 
 
 
