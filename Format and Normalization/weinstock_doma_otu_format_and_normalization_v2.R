@@ -9,7 +9,7 @@ library(qtl2)
 
 
 ### Load data
-load('~/Desktop/Weinstock_DOMA/Genotypes/JAC_crosssectional_genoprobs_20180618.Rdata')
+load('~/Desktop/Weinstock_DOMA/Genotypes/DODB/qtl2/JAC_megaMUGA_genoprobs_qtl2.RData')
 samples <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/DO_CrossSectional_Population.csv')
 chrY_M  <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/JAC_crosssectional_sex_chrM_Y_20180618.csv')
 otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned_filtered.rds')
@@ -40,8 +40,8 @@ samples <- samples %>%
 
 
 ### Normalize OTU
-norm <- apply(otu + 1, 2, function(x) x / sum(x))
-norm <- log(norm)
+norm <- apply(otu, 2, function(x) x / sum(x))
+norm <- log(norm + 1)
 
 
 
@@ -118,9 +118,8 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                          annot.samples   = as_tibble(samples),
                          covar.matrix    = as.matrix(covar),
                          covar.info      = as_tibble(covar.info),
-                         data            = list(log  = as.matrix(norm),
-                                                raw  = as.matrix(otu),
-                                                rz   = as.matrix(rz)),
+                         data            = list(norm  = as.matrix(norm),
+                                                raw  = as.matrix(otu)),
                          datatype        = 'phenotype',
                          display.name    = 'DOMA OTU Abundance',
                          lod.peaks       = list())
@@ -131,11 +130,7 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
 
 
 ### Map as dataframe
-markers <- map_list_to_df(map_list = map)
-markers <- markers %>% 
-              select(marker, chr, pos) %>% 
-              dplyr::rename(marker.id = marker) %>%
-              as_tibble()
+markers <- as_tibble(markers)
 
 
 
@@ -144,7 +139,7 @@ markers <- markers %>%
 
 
 ### Reducing genoprobs for lower memory. Then compute kinship
-genoprobs <- probs_qtl2_to_doqtl(probs = probs)
+genoprobs <- probs_qtl2_to_doqtl(probs = genoprobs)
 genoprobs <- genoprobs[dimnames(genoprobs)[[1]] %in% samples$mouse.id,,]
 genoprobs <- probs_doqtl_to_qtl2(probs = genoprobs, map = as.data.frame(markers), marker_column = 'marker.id', pos_column = 'pos')
 K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
@@ -156,4 +151,6 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 
 ### Save
 rm(list = ls()[!grepl('dataset[.]|K|map|markers|genoprobs', ls())])
-save.image(file = '~/Desktop/weinstock_doma_viewer_v2.Rdata')
+save.image(file = 'weinstock_doma_viewer_v2.Rdata')
+
+
