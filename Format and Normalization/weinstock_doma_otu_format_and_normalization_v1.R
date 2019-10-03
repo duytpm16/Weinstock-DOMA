@@ -133,7 +133,8 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                                                 rz   = as.matrix(rz)),
                          datatype        = 'phenotype',
                          display.name    = 'DOMA OTU Abundance',
-                         lod.peaks       = list())
+                         lod.peaks       = list(),
+                         taxa            = as_tibble(taxa))
 
 
 
@@ -151,13 +152,10 @@ markers <- as_tibble(markers)
 
 
 ### Reducing genoprobs for lower memory. Then compute kinship
-genoprobs <- probs_qtl2_to_doqtl(probs = geno  probs)
+genoprobs <- probs_qtl2_to_doqtl(probs = genoprobs)
 genoprobs <- genoprobs[dimnames(genoprobs)[[1]] %in% samples$mouse.id,,]
 genoprobs <- probs_doqtl_to_qtl2(probs = genoprobs, map = as.data.frame(markers), marker_column = 'marker.id', pos_column = 'pos')
 K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
-
-
-
 
 
 
