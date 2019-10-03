@@ -22,15 +22,15 @@ taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/
 
 ### Create sample annotations
 samples <- samples %>%
-              filter(Cohort == 'Cross-Sectional') %>%
-              filter(!grepl('HDO-', Mouse.ID)) %>%
-              select(Mouse.ID, Sex, DOB, Generation, Cohort.Age, Coat.Color, Wean.Date, DOD, Age.Death, From.Cage, JCMS.Cage, Cage, Ear.Notch, Cohort) %>%
-              mutate(Mouse.ID = gsub('-', '.', Mouse.ID)) %>%
-              left_join(y = chrY_M %>% select(X, chrM, chrY) %>% dplyr::rename(Mouse.ID = X), by = 'Mouse.ID') %>%
-              filter(Mouse.ID %in% rownames(otu)) %>%
-              mutate(Sex = factor(Sex), Generation = factor(Generation)) %>%
-              `colnames<-`(tolower(colnames(.))) %>%
-              distinct()
+  filter(Cohort == 'Cross-Sectional') %>%
+  filter(!grepl('HDO-', Mouse.ID)) %>%
+  select(Mouse.ID, Sex, DOB, Generation, Cohort.Age, Coat.Color, Wean.Date, DOD, Age.Death, From.Cage, JCMS.Cage, Cage, Ear.Notch, Cohort) %>%
+  mutate(Mouse.ID = gsub('-', '.', Mouse.ID)) %>%
+  left_join(y = chrY_M %>% select(X, chrM, chrY) %>% dplyr::rename(Mouse.ID = X), by = 'Mouse.ID') %>%
+  filter(Mouse.ID %in% rownames(otu)) %>%
+  mutate(Sex = factor(Sex), Generation = factor(Generation)) %>%
+  `colnames<-`(tolower(colnames(.))) %>%
+  distinct()
 
 
 
@@ -44,7 +44,7 @@ norm <- apply(otu, 2, function(x) x / sum(x))
 norm <- log(norm + 1)
 
 
-              
+
 
 
 
@@ -123,7 +123,8 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                                                 raw  = as.matrix(otu)),
                          datatype        = 'phenotype',
                          display.name    = 'DOMA OTU Abundance',
-                         lod.peaks       = list())
+                         lod.peaks       = list(),
+                         taxa            = as_tibble(taxa))
 
 
 
@@ -153,5 +154,4 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 ### Save
 rm(list = ls()[!grepl('dataset[.]|K|map|markers|genoprobs', ls())])
 save.image(file = 'weinstock_doma_viewer_v2.Rdata')
-
 
