@@ -35,6 +35,7 @@ for(i in colnames(chr_herit)){
                                      addcovar = covar,
                                      cores    = 0)[1]
     }
+    print(i)
 }
 
 
@@ -52,6 +53,7 @@ for(i in colnames(overall_herit)){
                                      kinship  = K_overall,
                                      addcovar = covar,
                                      cores    = 0)[1]
+    print(i)
 }
 
 
@@ -63,7 +65,7 @@ for(i in colnames(overall_herit)){
 
 
 ### Save
-dataset.doma.otu$herit <- list(overall = overall_herit, chromsome = chr_herit)
+dataset.doma.otu$herit <- list(overall = overall_herit, chromosome = chr_herit)
 
 
 rm(list = ls()[!grepl('dataset[.]|genoprobs|map|markers|K', ls())])
