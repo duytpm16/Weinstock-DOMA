@@ -68,6 +68,7 @@ rz <- apply(norm,  2, rankZ)
 ### Covariates
 covar <- model.matrix(~ sex + generation + cohort.age, data = samples)[, -1, drop = FALSE]
 covar <- covar[,c('sexM', 'cohort.age', grep('generation', colnames(covar), value = TRUE))]
+colnames(covar)[1] <- 'sex'
 rownames(covar) <- samples$mouse.id
 
 
