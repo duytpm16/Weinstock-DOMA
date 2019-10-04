@@ -26,12 +26,18 @@ taxa_0.8 <- taxa_0.8 %>%
 taxa_0.8 <- apply(taxa_0.8, 2, function(x) gsub('_', ' ', x))
 taxa_0.8 <- as.data.frame(taxa_0.8)
 
+
+
 taxa_0.5 <- taxa_0.5 %>% 
               dplyr::rename(OTU = X) %>%
               mutate(OTU = gsub('_', '-', OTU)) %>%
               select(OTU, genus, family, order, class, phylum, domain)
 taxa_0.5 <- apply(taxa_0.5, 2, function(x) gsub('_', ' ', x))
 taxa_0.5 <- as.data.frame(taxa_0.5)
+
+
+
+
 
 
 
@@ -62,13 +68,13 @@ dups <- unique(colnames(otu)[duplicated(colnames(otu))])
 keep <- rep(TRUE, ncol(otu))
 for(i in dups){
   
-  wh <- which(colnames(otu) == i)
-  print(wh)
-  lessZeros <- which.min(colSums(otu[,wh] == 0))
-  totalSum  <- which.max(colSums(otu[,wh]))
+    wh <- which(colnames(otu) == i)
+    print(wh)
+    lessZeros <- which.min(colSums(otu[,wh] == 0))
+    totalSum  <- which.max(colSums(otu[,wh]))
   
   
-  keep[wh[-totalSum]] <- FALSE
+    keep[wh[-totalSum]] <- FALSE
 }
 otu <- otu[,keep]
 orig.id <- orig.id[keep]
