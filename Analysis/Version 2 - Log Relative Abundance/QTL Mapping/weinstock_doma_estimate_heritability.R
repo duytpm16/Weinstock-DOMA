@@ -49,9 +49,9 @@ K_overall <- calc_kinship(probs = genoprobs, type = 'overall', cores = 0)
 overall_herit <- as.data.frame(matrix(0, nrow = 1, ncol = ncol(otu),
                                       dimnames = list('overall', colnames(otu))))
 
-for(i in colnames(chr_herit)){
-    overall_herit[1, i] <- est_herit(pheno = otu[, i, drop = FALSE], 
-                                     kinship  = K_overall[[chr]],
+for(i in colnames(overall_herit)){
+    overall_herit[1, i] <- est_herit(pheno    = otu[, i, drop = FALSE], 
+                                     kinship  = K_overall,
                                      addcovar = covar)[1]
     print(i)
 }
@@ -68,4 +68,5 @@ dataset.doma.otu$herit <- list(overall = overall_herit, chromsome = chr_herit)
 
 
 rm(list = ls()[!grepl('dataset[.]|genoprobs|map|markers|K', ls())])
+rm(K_overall)
 save.image('weinstock_doma_viewer_v2.Rdata')
