@@ -1,4 +1,4 @@
-      ### Options and libraries
+### Options and libraries
 options(stringsAsFactors = FALSE)
 library(tidyverse)
 library(qtl2)
