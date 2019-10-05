@@ -10,12 +10,17 @@ library(qtl2)
 
 
 
+
+
 ### Load data
 load('~/Desktop/Weinstock_DOMA/Genotypes/DODB/qtl2/JAC_megaMUGA_genoprobs_qtl2.RData')
 samples <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/DO_CrossSectional_Population.csv')
 chrY_M  <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/JAC_crosssectional_sex_chrM_Y_20180618.csv')
-otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned.rds')
-taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.8_cleaned.rds')
+otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/otu_raw_count_0.5_cleaned.rds')
+taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/otu_taxa_table_0.5_cleaned.rds')
+
+
+
 
 
 
@@ -23,8 +28,12 @@ taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/
 
 
 ### Removing OTUs with <= 5% prevalence according to Hoan
-###  otu: 403 x 380
+#     otu: 403 x 384
 otu <- otu[, colSums(otu > 0) > (nrow(otu) * 0.05)]
+
+
+
+
 
 
 
@@ -77,6 +86,9 @@ rz <- apply(vst,  2, rankZ)
 
 
 
+
+
+
 ### Covariates
 covar <- model.matrix(~ sex + generation + cohort.age, data = samples)[, -1, drop = FALSE]
 covar <- covar[,c('sexM', 'cohort.age', grep('generation', colnames(covar), value = TRUE))]
@@ -91,6 +103,9 @@ covar.info <- data.frame(sample.column = c('sex', 'cohort.age', 'generation'),
                          interactive   = c(TRUE, TRUE, FALSE),
                          primary       = c(TRUE, TRUE, FALSE),
                          lod.peaks     = c('sex_int', 'age_int', NA))
+
+
+
 
 
 
@@ -131,6 +146,10 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), taxa$OTU),
 
 
 
+
+
+
+
 ### QTL viewer format
 dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                          annot.samples   = as_tibble(samples),
@@ -159,11 +178,16 @@ markers <- as_tibble(markers)
 
 
 
+
 ### Reducing genoprobs for lower memory. Then compute kinship
 genoprobs <- probs_qtl2_to_doqtl(probs = genoprobs)
 genoprobs <- genoprobs[dimnames(genoprobs)[[1]] %in% samples$mouse.id,,]
 genoprobs <- probs_doqtl_to_qtl2(probs = genoprobs, map = as.data.frame(markers), marker_column = 'marker.id', pos_column = 'pos')
+
 K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
+
+
+
 
 
 
@@ -172,5 +196,5 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 
 ### Save
 rm(list = ls()[!grepl('dataset[.]|K|map|markers|genoprobs', ls())])
-save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
+save.image(file = '~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
 
