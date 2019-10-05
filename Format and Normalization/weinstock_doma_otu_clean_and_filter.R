@@ -20,7 +20,7 @@ otu  <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data
 
 ### Editing taxa table
 taxa_0.8 <- taxa_0.8 %>% 
-                dplyr::rename(OTU = X) %>%
+                rename(OTU = X) %>%
                 mutate(OTU = gsub('_', '-', OTU)) %>%
                 select(OTU, genus, family, order, class, phylum, domain)
 taxa_0.8 <- apply(taxa_0.8, 2, function(x) gsub('_', ' ', x))
@@ -29,9 +29,9 @@ taxa_0.8 <- as.data.frame(taxa_0.8)
 
 
 taxa_0.5 <- taxa_0.5 %>% 
-              dplyr::rename(OTU = X) %>%
-              mutate(OTU = gsub('_', '-', OTU)) %>%
-              select(OTU, genus, family, order, class, phylum, domain)
+                rename(OTU = X) %>%
+                mutate(OTU = gsub('_', '-', OTU)) %>%
+                select(OTU, genus, family, order, class, phylum, domain)
 taxa_0.5 <- apply(taxa_0.5, 2, function(x) gsub('_', ' ', x))
 taxa_0.5 <- as.data.frame(taxa_0.5)
 
@@ -82,6 +82,10 @@ orig.id <- orig.id[keep]
 
 
 
+### Keep raw
+raw <- otu
+raw_taxa_0.5 <- taxa_0.5
+raw_taxa_0.8 <- taxa_0.8
 
 
 
@@ -110,6 +114,9 @@ otu <- t(otu)
 
 
 ### Save
+saveRDS(raw_taxa_0.8, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.8_cleaned.rds')
+saveRDS(raw_taxa_0.5, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.5_cleaned.rds')
 saveRDS(taxa_0.8, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.8_cleaned_filtered.rds')
 saveRDS(taxa_0.5, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.5_cleaned_filtered.rds')
-saveRDS(otu, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned_filtered.rds')
+saveRDS(otu, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned_filtered_0.05.rds')
+saveRDS(raw, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned.rds')
