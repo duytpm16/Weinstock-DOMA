@@ -13,17 +13,30 @@ library(qtl2)
 ### Load data
 samples <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/DO_CrossSectional_Population.csv')
 chrY_M  <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/JAC_crosssectional_sex_chrM_Y_20180618.csv')
-load('family_raw_count_and_taxa.Rdata')
+load('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/family_raw_count_and_taxa_0.5.Rdata')
+
+
+
+
+
 
 
 
 
 
 ### Removing family with <= 5% prevalence according to Hoan
-#     family: 403 x 380
+#     family: 403 x 19
 family_counts <- family_counts[, colSums(family_counts > 0) > (nrow(family_counts) * 0.05)]
 family_taxa   <- family_taxa[,ncol(family_taxa):1]
 family_taxa   <- family_taxa %>% filter(Family %in% colnames(family_counts))
+
+
+
+
+
+
+
+
 
 
 
@@ -46,10 +59,16 @@ samples <- samples %>%
 
 
 
-### Normalize family. 
+
+
+
+### Normalize family
 form <- formula(~ 1)
 dds  <- DESeqDataSetFromMatrix(countData = t(family_counts), colData  = samples, design = form) 
 vst  <- t(as.matrix(assay(varianceStabilizingTransformation(dds))))
+
+
+
 
 
 
@@ -73,12 +92,14 @@ rz <- apply(vst,  2, rankZ)
 
 
 
+
+
+
 ### Covariates
 covar <- model.matrix(~ sex + generation + cohort.age, data = samples)[, -1, drop = FALSE]
 covar <- covar[,c('sexM', 'cohort.age', grep('generation', colnames(covar), value = TRUE))]
 colnames(covar)[1] <- 'sex'
 rownames(covar) <- samples$mouse.id
-
 
 
 covar.info <- data.frame(sample.column = c('sex', 'cohort.age', 'generation'),
@@ -87,6 +108,10 @@ covar.info <- data.frame(sample.column = c('sex', 'cohort.age', 'generation'),
                          interactive   = c(TRUE, TRUE, FALSE),
                          primary       = c(TRUE, TRUE, FALSE),
                          lod.peaks     = c('sex_int', 'age_int', NA))
+
+
+
+
 
 
 
@@ -127,6 +152,11 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), family_taxa[,'F
 
 
 
+
+
+
+
+
 ### QTL viewer format
 dataset.doma.family <- list(annot.phenotype = as_tibble(annot.phenotype),
                             annot.samples   = as_tibble(samples),
@@ -148,7 +178,12 @@ dataset.doma.family <- list(annot.phenotype = as_tibble(annot.phenotype),
 
 
 
+
+
+
+
+
 ### Save
 rm(list = ls()[!grepl('dataset[.]', ls())])
-load('~/Desktop/weinstock_doma_viewer_v1.Rdata')
-save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
+load('~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
+save.image(file = '~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
