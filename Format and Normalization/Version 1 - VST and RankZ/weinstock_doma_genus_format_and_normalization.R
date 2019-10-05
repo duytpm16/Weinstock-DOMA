@@ -19,19 +19,11 @@ load('genus_raw_count_and_taxa.Rdata')
 
 
 
-
-
 ### Removing genus with <= 5% prevalence according to Hoan
-#     genus: 403 x 380
+#     genus: 403 x 43
 genus_counts <- genus_counts[, colSums(genus_counts > 0) > (nrow(genus_counts) * 0.05)]
 genus_taxa   <- genus_taxa[,ncol(genus_taxa):1]
 genus_taxa   <- genus_taxa %>% filter(Genus %in% colnames(genus_counts))
-
-
-
-
-
-
 
 
 
