@@ -23,7 +23,7 @@ load('family_raw_count_and_taxa.Rdata')
 #     family: 403 x 380
 family_counts <- family_counts[, colSums(family_counts > 0) > (nrow(family_counts) * 0.05)]
 family_taxa   <- family_taxa[,ncol(family_taxa):1]
-
+family_taxa   <- family_taxa %>% filter(Family %in% colnames(family_counts))
 
 
 
@@ -152,4 +152,3 @@ dataset.doma.family <- list(annot.phenotype = as_tibble(annot.phenotype),
 rm(list = ls()[!grepl('dataset[.]', ls())])
 load('~/Desktop/weinstock_doma_viewer_v1.Rdata')
 save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
-
