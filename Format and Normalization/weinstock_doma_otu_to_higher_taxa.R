@@ -64,7 +64,7 @@ genus_taxa <- as.data.frame(taxa) %>%
                   filter(Genus %in% colnames(genus_counts)) %>% 
                   distinct() %>% 
                   arrange(Genus)
-                  
+
 
 save(genus_counts, genus_taxa, file = 'genus_raw_count_and_taxa.Rdata')
 
@@ -85,9 +85,10 @@ family_taxa   <- as.data.frame(as(tax_table(family), "matrix")) %>% select(Famil
 
 colnames(family_counts) <- family_taxa$Family[match(colnames(family_counts), rownames(family_taxa))]
 family_taxa <- as.data.frame(taxa) %>% 
-                    filter(Family %in% colnames(family_counts)) %>% 
-                    distinct() %>% 
-                    arrange(Family)
+                  filter(Family %in% colnames(family_counts)) %>% 
+                  select(-Genus) %>%
+                  distinct() %>% 
+                  arrange(Family)
 
 save(family_counts, family_taxa, file = 'family_raw_count_and_taxa.Rdata')
 
@@ -111,6 +112,7 @@ order_taxa   <- as.data.frame(as(tax_table(order), "matrix")) %>% select(Order)
 colnames(order_counts) <- order_taxa$Order[match(colnames(order_counts), rownames(order_taxa))]
 order_taxa <- as.data.frame(taxa) %>% 
                   filter(Order %in% colnames(order_counts)) %>% 
+                  select(-Genus, -Family) %>%
                   distinct() %>% 
                   arrange(Order)
 
@@ -134,6 +136,7 @@ class_taxa   <- as.data.frame(as(tax_table(class), "matrix")) %>% select(Class)
 colnames(class_counts) <- class_taxa$Class[match(colnames(class_counts), rownames(class_taxa))]
 class_taxa <- as.data.frame(taxa) %>% 
                   filter(Class %in% colnames(class_counts)) %>% 
+                  select(-Genus, -Family, -Order) %>%
                   distinct(Class) %>% 
                   arrange(Class)
 
@@ -157,8 +160,9 @@ phylum_taxa   <- as.data.frame(as(tax_table(phylum), "matrix")) %>% select(Phylu
 
 colnames(phylum_counts) <- phylum_taxa$Phylum[match(colnames(phylum_counts), rownames(phylum_taxa))]
 phylum_taxa <- as.data.frame(taxa) %>% 
-                    filter(Phylum %in% colnames(phylum_counts)) %>% 
-                    distinct(Phylum) %>% 
-                    arrange(Phylum)
+                  filter(Phylum %in% colnames(phylum_counts)) %>% 
+                  select(-Genus, -Family, -Order, -Class) %>%
+                  distinct(Phylum) %>% 
+                  arrange(Phylum)
 
 save(phylum_counts, phylum_taxa, file = 'phylum_raw_count_and_taxa.Rdata')
