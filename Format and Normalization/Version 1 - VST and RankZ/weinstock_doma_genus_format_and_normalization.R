@@ -19,10 +19,18 @@ load('genus_raw_count_and_taxa.Rdata')
 
 
 
+
+
 ### Removing genus with <= 5% prevalence according to Hoan
 #     genus: 403 x 380
 genus_counts <- genus_counts[, colSums(genus_counts > 0) > (nrow(genus_counts) * 0.05)]
 genus_taxa   <- genus_taxa[,ncol(genus_taxa):1]
+genus_taxa   <- genus_taxa %>% filter(Genus %in% colnames(genus_counts))
+
+
+
+
+
 
 
 
@@ -152,4 +160,3 @@ dataset.doma.genus <- list(annot.phenotype = as_tibble(annot.phenotype),
 rm(list = ls()[!grepl('dataset[.]', ls())])
 load('~/Desktop/weinstock_doma_viewer_v1.Rdata')
 save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
-
