@@ -8,8 +8,9 @@ library(phyloseq)
 
 
 ### Read in OTU and taxa data
-otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned_filtered.rds')
-taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.5_cleaned_filtered.rds')
+otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned.rds')
+taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.8_cleaned.rds')
+
 
 
 
@@ -27,6 +28,7 @@ taxa <- taxa %>%
                         Domain = domain) %>%
           select(Domain, Phylum, Class, Order, Family, Genus) %>%
           as.matrix()
+
 
 
 
@@ -62,6 +64,7 @@ genus_taxa <- as.data.frame(taxa) %>%
                   filter(Genus %in% colnames(genus_counts)) %>% 
                   distinct() %>% 
                   arrange(Genus)
+                  
 
 save(genus_counts, genus_taxa, file = 'genus_raw_count_and_taxa.Rdata')
 
@@ -82,9 +85,9 @@ family_taxa   <- as.data.frame(as(tax_table(family), "matrix")) %>% select(Famil
 
 colnames(family_counts) <- family_taxa$Family[match(colnames(family_counts), rownames(family_taxa))]
 family_taxa <- as.data.frame(taxa) %>% 
-                  filter(Family %in% colnames(family_counts)) %>% 
-                  distinct() %>% 
-                  arrange(Family)
+                    filter(Family %in% colnames(family_counts)) %>% 
+                    distinct() %>% 
+                    arrange(Family)
 
 save(family_counts, family_taxa, file = 'family_raw_count_and_taxa.Rdata')
 
@@ -154,8 +157,8 @@ phylum_taxa   <- as.data.frame(as(tax_table(phylum), "matrix")) %>% select(Phylu
 
 colnames(phylum_counts) <- phylum_taxa$Phylum[match(colnames(phylum_counts), rownames(phylum_taxa))]
 phylum_taxa <- as.data.frame(taxa) %>% 
-                  filter(Phylum %in% colnames(phylum_counts)) %>% 
-                  distinct(Phylum) %>% 
-                  arrange(Phylum)
+                    filter(Phylum %in% colnames(phylum_counts)) %>% 
+                    distinct(Phylum) %>% 
+                    arrange(Phylum)
 
 save(phylum_counts, phylum_taxa, file = 'phylum_raw_count_and_taxa.Rdata')
