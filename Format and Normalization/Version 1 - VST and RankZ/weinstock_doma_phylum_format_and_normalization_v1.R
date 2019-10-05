@@ -152,16 +152,16 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), phylum_taxa[,'P
 
 ### QTL viewer format
 dataset.doma.phylum <- list(annot.phenotype  = as_tibble(annot.phenotype),
-                           annot.samples   = as_tibble(samples),
-                           covar.matrix    = as.matrix(covar),
-                           covar.info      = as_tibble(covar.info),
-                           data            = list(norm = as.matrix(vst),
-                                                  raw  = as.matrix(phylum_counts),
-                                                  rz   = as.matrix(rz)),
-                           datatype        = 'phenotype',
-                           display.name    = 'DOMA Phylum Abundance',
-                           lod.peaks       = list(),
-                           taxa            = as_tibble(phylum_taxa))
+                            annot.samples   = as_tibble(samples),
+                            covar.matrix    = as.matrix(covar),
+                            covar.info      = as_tibble(covar.info),
+                            data            = list(norm = as.matrix(vst),
+                                                   raw  = as.matrix(phylum_counts),
+                                                   rz   = as.matrix(rz)),
+                            datatype        = 'phenotype',
+                            display.name    = 'DOMA Phylum Abundance',
+                            lod.peaks       = list(),
+                            taxa            = as_tibble(phylum_taxa))
 
 
 
@@ -174,6 +174,5 @@ dataset.doma.phylum <- list(annot.phenotype  = as_tibble(annot.phenotype),
 
 ### Save
 rm(list = ls()[!grepl('dataset[.]', ls())])
-load('~/Desktop/weinstock_doma_viewer_v1.Rdata')
-save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
-
+load('~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
+save.image(file = '~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
