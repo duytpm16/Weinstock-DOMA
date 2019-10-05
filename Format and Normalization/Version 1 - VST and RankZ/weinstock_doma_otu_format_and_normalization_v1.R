@@ -197,4 +197,3 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 ### Save
 rm(list = ls()[!grepl('dataset[.]|K|map|markers|genoprobs', ls())])
 save.image(file = '~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
-
