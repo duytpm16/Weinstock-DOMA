@@ -85,10 +85,10 @@ family_taxa   <- as.data.frame(as(tax_table(family), "matrix")) %>% select(Famil
 
 colnames(family_counts) <- family_taxa$Family[match(colnames(family_counts), rownames(family_taxa))]
 family_taxa <- as.data.frame(taxa) %>% 
-                  filter(Family %in% colnames(family_counts)) %>% 
-                  select(-Genus) %>%
-                  distinct() %>% 
-                  arrange(Family)
+                    filter(Family %in% colnames(family_counts)) %>% 
+                    select(-Genus) %>%
+                    distinct() %>% 
+                    arrange(Family)
 
 save(family_counts, family_taxa, file = 'family_raw_count_and_taxa.Rdata')
 
@@ -136,10 +136,10 @@ class_taxa   <- as.data.frame(as(tax_table(class), "matrix")) %>% select(Class)
 colnames(class_counts) <- class_taxa$Class[match(colnames(class_counts), rownames(class_taxa))]
 class_taxa <- as.data.frame(taxa) %>% 
                   filter(Class %in% colnames(class_counts)) %>% 
-                  select(-Genus, -Family, -Order) %>%
                   distinct(Class) %>% 
                   arrange(Class)
-
+class_taxa <- merge(class_taxa, taxa[,c('Class', 'Phylum', 'Domain')], by = 'Class')
+class_taxa <- class_taxa %>% distinct()
 save(class_counts, class_taxa, file = 'class_raw_count_and_taxa.Rdata')
 
 
@@ -164,5 +164,5 @@ phylum_taxa <- as.data.frame(taxa) %>%
                   select(-Genus, -Family, -Order, -Class) %>%
                   distinct(Phylum) %>% 
                   arrange(Phylum)
-
+phylum_taxa$Domain <- 'Bacteria'
 save(phylum_counts, phylum_taxa, file = 'phylum_raw_count_and_taxa.Rdata')
