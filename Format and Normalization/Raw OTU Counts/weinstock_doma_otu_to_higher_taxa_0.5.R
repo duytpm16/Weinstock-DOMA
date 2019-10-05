@@ -8,8 +8,9 @@ library(phyloseq)
 
 
 ### Read in OTU and taxa data
-otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned.rds')
-taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.8_cleaned.rds')
+otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/otu_raw_count_0.5_cleaned.rds')
+taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/otu_taxa_table_0.5_cleaned.rds')
+
 
 
 
@@ -28,6 +29,8 @@ taxa <- taxa %>%
                         Domain = domain) %>%
           select(Domain, Phylum, Class, Order, Family, Genus) %>%
           as.matrix()
+
+
 
 
 
@@ -65,8 +68,7 @@ genus_taxa <- as.data.frame(taxa) %>%
                   distinct() %>% 
                   arrange(Genus)
 
-
-save(genus_counts, genus_taxa, file = 'genus_raw_count_and_taxa.Rdata')
+save(genus_counts, genus_taxa, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/genus_raw_count_and_taxa_0.5.Rdata')
 
 
 
@@ -90,7 +92,7 @@ family_taxa <- as.data.frame(taxa) %>%
                     distinct() %>% 
                     arrange(Family)
 
-save(family_counts, family_taxa, file = 'family_raw_count_and_taxa.Rdata')
+save(family_counts, family_taxa, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/family_raw_count_and_taxa_0.5.Rdata')
 
 
 
@@ -116,7 +118,7 @@ order_taxa <- as.data.frame(taxa) %>%
                   distinct() %>% 
                   arrange(Order)
 
-save(order_counts, order_taxa, file = 'order_raw_count_and_taxa.Rdata')
+save(order_counts, order_taxa, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/order_raw_count_and_taxa_0.5.Rdata')
 
 
 
@@ -140,7 +142,8 @@ class_taxa <- as.data.frame(taxa) %>%
                   arrange(Class)
 class_taxa <- merge(class_taxa, taxa[,c('Class', 'Phylum', 'Domain')], by = 'Class')
 class_taxa <- class_taxa %>% distinct()
-save(class_counts, class_taxa, file = 'class_raw_count_and_taxa.Rdata')
+
+save(class_counts, class_taxa, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/class_raw_count_and_taxa_0.5.Rdata')
 
 
 
@@ -165,4 +168,5 @@ phylum_taxa <- as.data.frame(taxa) %>%
                   distinct(Phylum) %>% 
                   arrange(Phylum)
 phylum_taxa$Domain <- 'Bacteria'
-save(phylum_counts, phylum_taxa, file = 'phylum_raw_count_and_taxa.Rdata')
+
+save(phylum_counts, phylum_taxa, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/phylum_raw_count_and_taxa_0.5.Rdata')
