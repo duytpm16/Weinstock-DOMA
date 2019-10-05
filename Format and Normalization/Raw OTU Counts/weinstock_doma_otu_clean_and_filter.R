@@ -1,4 +1,4 @@
-### Options and libraries
+      ### Options and libraries
 options(stringsAsFactors = FALSE)
 library(tidyverse)
 library(qtl2)
@@ -7,11 +7,16 @@ library(qtl2)
 
 
 
+
+
 ### Read in OTU data
-taxa_0.8 <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/otu_taxa_rdpc0.8.tsv')
-taxa_0.5 <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/otu_taxa_rdpc0.5.tsv')
-otu_0.8  <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/otu_table_by_otutab_0.8.tsv')
-otu_0.5  <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/DOMA_otu_403_0.5.txt')
+taxa_0.8 <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Original/otu_taxa_rdpc0.8.tsv')
+otu_0.8  <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Original/otu_table_by_otutab_0.8.tsv')
+taxa_0.5 <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Original/otu_taxa_rdpc0.5.tsv')
+otu_0.5  <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Original/DOMA_otu_403_0.5.txt')
+
+
+
 
 
 
@@ -35,6 +40,8 @@ taxa_0.5 <- taxa_0.5 %>%
               select(OTU, genus, family, order, class, phylum, domain)
 taxa_0.5 <- apply(taxa_0.5, 2, function(x) gsub('_', ' ', x))
 taxa_0.5 <- as.data.frame(taxa_0.5)
+
+
 
 
 
@@ -85,11 +92,16 @@ orig.id <- orig.id[keep]
 
 ### Editing OTU 0.5 table
 otu_0.5 <- otu_0.5 %>% 
-             dplyr::mutate(SampleID = gsub('_', '-', SampleID)) %>%  
-             arrange(SampleID) %>%
-             column_to_rownames('SampleID')
+              dplyr::mutate(SampleID = gsub('_', '-', SampleID)) %>%  
+              arrange(SampleID) %>%
+              column_to_rownames('SampleID')
+colnames(otu_0.5) <- gsub('D0', 'DO', colnames(otu_0.5))
 colnames(otu_0.5) <- gsub('(DO_[0-9][0-9][0-9][0-9]).*', "\\1", colnames(otu_0.5))
 colnames(otu_0.5) <- gsub('_', ".", colnames(otu_0.5))
+
+
+
+
 
 
 
@@ -114,8 +126,12 @@ otu_0.5 <- t(otu_0.5)
 
 
 
+
+
+
 ### Save
-saveRDS(taxa_0.8, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.8_cleaned.rds')
-saveRDS(taxa_0.5, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.5_cleaned.rds')
-saveRDS(otu_0.5, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_0.5_cleaned.rds')
-saveRDS(otu_0.8, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_0.8_cleaned.rds')
+saveRDS(taxa_0.8, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.8/otu_taxa_table_0.8_cleaned.rds')
+saveRDS(otu_0.8, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.8/otu_raw_count_0.8_cleaned.rds')
+saveRDS(taxa_0.5, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/otu_taxa_table_0.5_cleaned.rds')
+saveRDS(otu_0.5, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/otu_raw_count_0.5_cleaned.rds')
+
