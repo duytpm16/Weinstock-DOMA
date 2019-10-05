@@ -20,9 +20,9 @@ otu  <- read.delim(file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data
 
 ### Editing taxa table
 taxa_0.8 <- taxa_0.8 %>% 
-                rename(OTU = X) %>%
-                mutate(OTU = gsub('_', '-', OTU)) %>%
-                select(OTU, genus, family, order, class, phylum, domain)
+              rename(OTU = X) %>%
+              mutate(OTU = gsub('_', '-', OTU)) %>%
+              select(OTU, genus, family, order, class, phylum, domain)
 taxa_0.8 <- apply(taxa_0.8, 2, function(x) gsub('_', ' ', x))
 taxa_0.8 <- as.data.frame(taxa_0.8)
 
@@ -73,7 +73,6 @@ for(i in dups){
     lessZeros <- which.min(colSums(otu[,wh] == 0))
     totalSum  <- which.max(colSums(otu[,wh]))
   
-  
     keep[wh[-totalSum]] <- FALSE
 }
 otu <- otu[,keep]
@@ -82,6 +81,11 @@ orig.id <- orig.id[keep]
 
 
 
+                  
+                  
+                  
+                  
+                  
 ### Keep raw
 raw <- otu
 raw_taxa_0.5 <- taxa_0.5
@@ -90,6 +94,11 @@ raw_taxa_0.8 <- taxa_0.8
 
 
 
+                  
+                  
+                  
+                  
+                  
 ### Remove OTUs with prevalence > 5%
 otu  <- otu[which(rowSums(otu > 0) > (ncol(otu) * 0.05)),]
 taxa_0.8 <- taxa_0.8 %>% filter(OTU %in% rownames(otu))
@@ -99,20 +108,31 @@ taxa_0.5 <- taxa_0.5 %>% filter(OTU %in% rownames(otu))
 
 
 
+                 
+                  
+                  
+                  
+                  
 ### Reorder
-otu <- otu[taxa_0.5$OTU, order(colnames(otu))]
+otu <- otu[taxa_0.8$OTU, order(colnames(otu))]
 colnames(otu) <- gsub('_', '.', colnames(otu))
 otu <- t(otu)
 
 
+raw <- raw[raw_taxa_0.8$OTU, order(colnames(raw))]
+colnames(raw) <- gsub('_', '.', colnames(raw))
+raw <- t(raw)
 
 
 
 
 
+                  
+                  
+                  
 
 
-
+                  
 ### Save
 saveRDS(raw_taxa_0.8, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.8_cleaned.rds')
 saveRDS(raw_taxa_0.5, file = '~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.5_cleaned.rds')
