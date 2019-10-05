@@ -13,16 +13,25 @@ library(qtl2)
 ### Load data
 samples <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/DO_CrossSectional_Population.csv')
 chrY_M  <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/JAC_crosssectional_sex_chrM_Y_20180618.csv')
-load('order_raw_count_and_taxa.Rdata')
+load('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/order_raw_count_and_taxa_0.5.Rdata')
+
+
+
 
 
 
 
 
 ### Removing order with <= 5% prevalence according to Hoan
-#     order: 403 x 380
+#     order: 403 x 11
 order_counts <- order_counts[, colSums(order_counts > 0) > (nrow(order_counts) * 0.05)]
 order_taxa   <- order_taxa[,ncol(order_taxa):1]
+order_taxa   <- order_taxa %>% filter(Order %in% colnames(order_counts))
+
+
+
+
+
 
 
 
@@ -46,11 +55,11 @@ samples <- samples %>%
 
 
 
-### Normalize order. 
+
+### Normalize order
 form <- formula(~ 1)
 dds  <- DESeqDataSetFromMatrix(countData = t(order_counts), colData  = samples, design = form) 
 vst  <- t(as.matrix(assay(varianceStabilizingTransformation(dds))))
-
 
 
 
@@ -73,6 +82,8 @@ rz <- apply(vst,  2, rankZ)
 
 
 
+
+
 ### Covariates
 covar <- model.matrix(~ sex + generation + cohort.age, data = samples)[, -1, drop = FALSE]
 covar <- covar[,c('sexM', 'cohort.age', grep('generation', colnames(covar), value = TRUE))]
@@ -87,6 +98,10 @@ covar.info <- data.frame(sample.column = c('sex', 'cohort.age', 'generation'),
                          interactive   = c(TRUE, TRUE, FALSE),
                          primary       = c(TRUE, TRUE, FALSE),
                          lod.peaks     = c('sex_int', 'age_int', NA))
+
+
+
+
 
 
 
@@ -127,6 +142,10 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), order_taxa[,'Or
 
 
 
+
+
+
+
 ### QTL viewer format
 dataset.doma.order <- list(annot.phenotype = as_tibble(annot.phenotype),
                             annot.samples   = as_tibble(samples),
@@ -148,8 +167,16 @@ dataset.doma.order <- list(annot.phenotype = as_tibble(annot.phenotype),
 
 
 
+
+
+
+
+
+
+
+
 ### Save
 rm(list = ls()[!grepl('dataset[.]', ls())])
-load('~/Desktop/weinstock_doma_viewer_v1.Rdata')
-save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
+load('~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
+save.image(file = '~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
 
