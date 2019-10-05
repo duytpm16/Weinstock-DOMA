@@ -14,10 +14,17 @@ library(qtl2)
 load('~/Desktop/Weinstock_DOMA/Genotypes/DODB/qtl2/JAC_megaMUGA_genoprobs_qtl2.RData')
 samples <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/DO_CrossSectional_Population.csv')
 chrY_M  <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/JAC_crosssectional_sex_chrM_Y_20180618.csv')
-otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned_filtered.rds')
-taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.5_cleaned_filtered.rds')
+otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned.rds')
+taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.8_cleaned.rds')
 
 
+
+
+
+
+### Removing OTUs with <= 5% prevalence according to Hoan
+###  otu: 403 x 380
+otu <- otu[, colSums(otu > 0) > (nrow(otu) * 0.05)]
 
 
 
@@ -42,7 +49,7 @@ samples <- samples %>%
 
 
 
-### Normalize OTU. Adding 1 so I can compute geometric mean according to Dong-binh
+### Normalize OTU. 
 form <- formula(~ 1)
 dds  <- DESeqDataSetFromMatrix(countData = t(otu), colData  = samples, design = form) 
 dds  <- estimateSizeFactors(dds, type = 'poscounts')
@@ -166,6 +173,4 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 ### Save
 rm(list = ls()[!grepl('dataset[.]|K|map|markers|genoprobs', ls())])
 save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
-
-
 
