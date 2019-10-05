@@ -7,7 +7,11 @@ library(qtl2)
 
 
 ### Load viewer data and permutations
-load('weinstock_doma_viewer_v1.Rdata')
+load('~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
+
+
+
+
 
 
 
@@ -16,6 +20,8 @@ load('weinstock_doma_viewer_v1.Rdata')
 ### Extract data
 otu   <- dataset.doma.otu$data$rz
 covar <- dataset.doma.otu$covar.matrix
+
+
 
 
 
@@ -42,6 +48,10 @@ for(i in colnames(chr_herit)){
 
 
 
+
+
+
+
 ### Estimate overall heritability for each OTU
 K_overall <- calc_kinship(probs = genoprobs, type = 'overall', cores = 0)
 
@@ -49,7 +59,7 @@ overall_herit <- as.data.frame(matrix(0, nrow = 1, ncol = ncol(otu),
                                       dimnames = list('overall', colnames(otu))))
 
 for(i in colnames(overall_herit)){
-    overall_herit[1, i] <- est_herit(pheno = otu[, i, drop = FALSE], 
+    overall_herit[1, i] <- est_herit(pheno    = otu[, i, drop = FALSE], 
                                      kinship  = K_overall,
                                      addcovar = covar,
                                      cores    = 0)[1]
@@ -64,10 +74,16 @@ for(i in colnames(overall_herit)){
 
 
 
+
+
+
+
+
 ### Save
-dataset.doma.otu$herit <- list(overall = overall_herit, chromosome = chr_herit)
+dataset.doma.otu$herit <- list(overall    = overall_herit, 
+                               chromosome = chr_herit)
 
 
 rm(list = ls()[!grepl('dataset[.]|genoprobs|map|markers|K', ls())])
 rm(K_overall)
-save.image('weinstock_doma_viewer_v1.Rdata')
+save.image('~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
