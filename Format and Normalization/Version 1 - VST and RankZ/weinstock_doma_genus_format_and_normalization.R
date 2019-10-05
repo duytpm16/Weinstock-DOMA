@@ -13,17 +13,28 @@ library(qtl2)
 ### Load data
 samples <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/DO_CrossSectional_Population.csv')
 chrY_M  <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/JAC_crosssectional_sex_chrM_Y_20180618.csv')
-load('genus_raw_count_and_taxa.Rdata')
+load('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/genus_raw_count_and_taxa_0.5.Rdata')
+
+
+
+
 
 
 
 
 
 ### Removing genus with <= 5% prevalence according to Hoan
-#     genus: 403 x 43
+#     genus: 403 x 53
 genus_counts <- genus_counts[, colSums(genus_counts > 0) > (nrow(genus_counts) * 0.05)]
 genus_taxa   <- genus_taxa[,ncol(genus_taxa):1]
 genus_taxa   <- genus_taxa %>% filter(Genus %in% colnames(genus_counts))
+
+
+
+
+
+
+
 
 
 
@@ -65,6 +76,8 @@ rankZ = function(x) {
 
 
 rz <- apply(vst,  2, rankZ)
+
+
 
 
 
@@ -127,6 +140,11 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), genus_taxa[,'Ge
 
 
 
+
+
+
+
+
 ### QTL viewer format
 dataset.doma.genus <- list(annot.phenotype = as_tibble(annot.phenotype),
                            annot.samples   = as_tibble(samples),
@@ -150,5 +168,5 @@ dataset.doma.genus <- list(annot.phenotype = as_tibble(annot.phenotype),
 
 ### Save
 rm(list = ls()[!grepl('dataset[.]', ls())])
-load('~/Desktop/weinstock_doma_viewer_v1.Rdata')
-save.image(file = '~/Desktop/weinstock_doma_viewer_v1.Rdata')
+load('~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
+save.image(file = '~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
