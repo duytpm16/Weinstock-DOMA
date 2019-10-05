@@ -1,5 +1,5 @@
 ### This script runs additive permutations in parallel using R script from:
-https://github.com/duytpm16/qtl2-HPC-pipeline/blob/master/R%20scripts/qtl2_scan1perm.R
+#    https://github.com/duytpm16/qtl2-HPC-pipeline/blob/master/R%20scripts/qtl2_scan1perm.R
 
 
 #PBS -q batch
