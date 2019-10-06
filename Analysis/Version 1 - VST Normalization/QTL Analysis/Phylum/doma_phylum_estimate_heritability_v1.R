@@ -39,7 +39,7 @@ for(i in colnames(chr_herit)){
         chr_herit[j, i] <- est_herit(pheno    = phylum[, i, drop = FALSE], 
                                      kinship  = K[[chr]],
                                      addcovar = covar,
-                                    cores    = 0)[1]
+                                     cores    = 0)[1]
     }
     print(i)
 }
