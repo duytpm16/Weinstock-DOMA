@@ -7,8 +7,8 @@ library(qtl2)
 
 
 ### Load data
-load('~/Desktop/weinstock_doma_viewer_v1.Rdata')
- 
+load('~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
+
 
 
 
@@ -47,22 +47,22 @@ for(i in 1:nrow(peaks)){
   
     gp <- genoprobs[,peaks$qtl.chr[i]]
     gp[[1]] <- gp[[1]][,,peaks$marker.id[i], drop = FALSE]
-    
-    
+  
+  
     f_blup <- scan1blup(genoprobs = gp,
                         pheno     = f_otu[,peaks$data.name[i], drop = FALSE],
                         kinship   = K[[peaks$qtl.chr[i]]],
                         addcovar  = covar)
-    
+  
     m_blup <- scan1blup(genoprobs = gp,
                         pheno     = m_otu[,peaks$data.name[i], drop = FALSE],
                         kinship   = K[[peaks$qtl.chr[i]]],
                         addcovar  = covar)
-    
-    
+  
+  
     peaks[i,paste0(LETTERS[1:8], '_female')] <- f_blup[1,LETTERS[1:8]]
     peaks[i,paste0(LETTERS[1:8], '_male')]   <- m_blup[1,LETTERS[1:8]]
-    
+  
 }
 
 
@@ -74,6 +74,8 @@ dataset.doma.otu$lod.peaks$sex_int <- peaks
 
 
 
+
+
 ### Save
 rm(list = ls()[!grepl('dataset[.]|genoprobs|map|markers|K', ls())])
-save.image('~/Desktop/weinstock_doma_viewer_v1.Rdata')
+save.image('~/Desktop/Weinstock_DOMA/Viewer/Version 1 - VST and RankZ/weinstock_doma_viewer_v1.Rdata')
