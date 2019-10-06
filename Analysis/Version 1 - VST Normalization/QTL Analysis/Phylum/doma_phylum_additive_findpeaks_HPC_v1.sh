@@ -1,4 +1,4 @@
-### This script finds additive QTLs using R script from:
+### This shell script finds additive QTLs using R script from:
 #     https://github.com/duytpm16/qtl2-HPC-pipeline/blob/master/R%20scripts/qtl2_findpeaks.R
 
 
