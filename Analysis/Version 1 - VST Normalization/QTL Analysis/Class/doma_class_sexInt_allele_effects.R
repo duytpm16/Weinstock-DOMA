@@ -1,7 +1,7 @@
 ### Options and libraries
 options(stringsAsFactors = FALSE)
 library(qtl2)
-
+library(dplyr)
 
 
 
