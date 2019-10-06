@@ -1,4 +1,4 @@
-### This script runs age interaction using R script located:
+### This shell script runs age interaction using R script located:
 #      https://github.com/duytpm16/qtl2-HPC-pipeline/blob/master/R%20scripts/qtl2_scan1.R
 
 
