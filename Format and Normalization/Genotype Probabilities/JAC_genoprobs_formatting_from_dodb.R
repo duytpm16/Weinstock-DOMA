@@ -32,8 +32,8 @@ library(qtl2)
 ### Load data
 #    1.)Physical markers
 #    2.) Read in DODB genoprobs data and convert to doqtl format for easy editing
-markers   <- read.csv('Churchill-046_JAC_DO_Aging-MegaMUGA_pmap.csv')
-genoprobs <- read_rds('Churchill_046_JAC_DO_Aging__genoprobs_8state_MegaMUGA.rds')
+markers   <- read.csv('~/Desktop/Weinstock_DOMA/Genotypes/DODB/Original/Churchill-046_JAC_DO_Aging-MegaMUGA_pmap.csv')
+genoprobs <- read_rds('~/Desktop/Weinstock_DOMA/Genotypes/DODB/Original/Churchill_046_JAC_DO_Aging__genoprobs_8state_MegaMUGA.rds')
 genoprobs <- probs_qtl2_to_doqtl(probs = genoprobs)
 
 
@@ -45,9 +45,10 @@ genoprobs <- probs_qtl2_to_doqtl(probs = genoprobs)
 
 ### Edit markers and convert to map list for qtl2
 markers <- markers %>%
-              filter(chr %in% c(1:19,'X')) %>%
-              dplyr::rename(marker.id = marker) %>%
-              mutate(chr = factor(chr, levels = c(1:19,'X')))
+             filter(chr %in% c(1:19,'X')) %>%
+             filter(pos > 0) %>%
+             dplyr::rename(marker.id = marker) %>%
+             mutate(chr = factor(chr, levels = c(1:19,'X')))
 
 map <- map_df_to_list(map = markers, chr_column = 'chr', pos_column = 'pos', marker_column = 'marker.id')
 
@@ -89,7 +90,7 @@ dimnames(genoprobs)[[1]] <- gsub("-", ".", dimnames(genoprobs)[[1]])
 # [12] "Jackson_Laboratory_MEGMUGV01_20140627_DO-0940_B11"
 # This can be done as on line 91 due to the ordering of the samples.
 genoprobs <- genoprobs[!duplicated(dimnames(genoprobs)[[1]]),,]
- 
+
 
 
 
@@ -110,5 +111,6 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 
 ### Save
 save.image(file = 'JAC_megaMUGA_genoprobs_qtl2.RData')
+
 
 
