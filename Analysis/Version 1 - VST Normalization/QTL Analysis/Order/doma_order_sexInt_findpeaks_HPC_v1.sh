@@ -16,11 +16,11 @@ dataset_expr='dataset.doma.order|data|rz'
 thr='6'
 num_cores='1'
 type_scan='sex_int'
-drop='.95'
+prob='.95'
 cis_threshold='NA'
 int_mat='doma_order_sex_int_scan_v1.rds'
 
 
 
-Rscript qtl2_findpeaks.R "viewer_data=$viewer_data" "scan1_mat=$scan1_mat" "dataset_expr=$dataset_expr" "thr=$thr" "num_cores=$num_cores" "type_scan=$type_scan" "drop=$drop" "cis_threshold=$cis_threshold" "int_mat=$int_mat"
+Rscript qtl2_findpeaks.R "viewer_data=$viewer_data" "scan1_mat=$scan1_mat" "dataset_expr=$dataset_expr" "thr=$thr" "num_cores=$num_cores" "type_scan=$type_scan" "prob=$prob" "cis_threshold=$cis_threshold" "int_mat=$int_mat"
 
