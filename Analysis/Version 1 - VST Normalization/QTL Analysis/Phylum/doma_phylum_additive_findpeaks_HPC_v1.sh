@@ -16,11 +16,11 @@ dataset_expr='dataset.doma.phylum|data|rz'
 thr='6'
 num_cores='1'
 type_scan='additive'
-drop='.95'
+prob='.95'
 cis_threshold='NA'
 int_mat='NA'
 
 
 
-Rscript qtl2_findpeaks.R "viewer_data=$viewer_data" "scan1_mat=$scan1_mat" "dataset_expr=$dataset_expr" "thr=$thr" "num_cores=$num_cores" "type_scan=$type_scan" "drop=$drop" "cis_threshold=$cis_threshold" "int_mat=$int_mat"
+Rscript qtl2_findpeaks.R "viewer_data=$viewer_data" "scan1_mat=$scan1_mat" "dataset_expr=$dataset_expr" "thr=$thr" "num_cores=$num_cores" "type_scan=$type_scan" "prob=$prob" "cis_threshold=$cis_threshold" "int_mat=$int_mat"
 
