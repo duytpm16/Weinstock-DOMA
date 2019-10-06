@@ -1,4 +1,4 @@
-### This script runs sex interaction scan using R script located:
+### This shell script runs sex interaction scan using R script located:
 #     https://github.com/duytpm16/qtl2-HPC-pipeline/blob/master/R%20scripts/qtl2_scan1.R
 
 
