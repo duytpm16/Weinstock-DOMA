@@ -1,4 +1,4 @@
-### This script finds sex interaction peaks above 6 using R script located:
+### This script finds age effect QTLs with LOD >6 using R script located:
 #     https://github.com/duytpm16/qtl2-HPC-pipeline/blob/master/R%20scripts/qtl2_findpeaks.R
 
 
@@ -13,7 +13,7 @@ scan1_mat='doma_otu_additive_scan_v1.rds'
 dataset_expr='dataset.doma.otu|data|rz'
 thr='6'
 num_cores='8'
-type_scan='additive'
+type_scan='age_int'
 prob='.95'
 cis_threshold='NA'
 int_mat='doma_otu_cohort.age_int_scan_v1.rds'
