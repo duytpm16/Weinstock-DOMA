@@ -11,7 +11,7 @@ module load R/3.5.1
 
 
 viewer_data='weinstock_doma_viewer_v1.Rdata'
-dataset_expr='dataset.doma.order|data|rz'
+dataset_expr='dataset.doma.family|data|rz'
 num_cores='2'
 int_name='sex'
 chunk_number='NA'
