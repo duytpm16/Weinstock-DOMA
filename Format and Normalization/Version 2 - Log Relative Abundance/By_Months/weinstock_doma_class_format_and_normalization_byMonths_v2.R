@@ -1,7 +1,6 @@
 ### Options and libraries
 options(stringsAsFactors = FALSE)
 library(qtl2convert)
-library(microbiome)
 library(tidyverse)
 library(qtl2)
 
@@ -56,11 +55,26 @@ class_m18 <- class_m18[, colSums(class_m18 > 0) > (nrow(class_m18) * 0.05)]
 
 
 
-### Normalize class. 
-norm_m6  <- t(transform(t(class_m6),  transform = 'clr', target = 'sample'))
-norm_m12 <- t(transform(t(class_m12), transform = 'clr', target = 'sample'))
-norm_m18 <- t(transform(t(class_m18), transform = 'clr', target = 'sample'))
+### Normalize class using Hoans'/Dong-bing's normalization. 
+codaSeq.clr <- function(x, samples.by.row=TRUE){
+  
+  if(min(x) == 0) stop("0 values must be replaced, estimated, or eliminated")
+  if(samples.by.row == TRUE){margin=1}
+  if(samples.by.row == FALSE){margin=2}
+  
+  return ( t(apply(x, margin, function(x){log(x) - mean(log(x))})) )
+}
+norm_m6  <- apply(class_m6, 2, function(x) x / sum(x))
+norm_m6  <- norm_m6 + 1
+norm_m6  <- codaSeq.clr(x = norm_m6, samples.by.row = TRUE)
 
+norm_m12  <- apply(class_m12, 2, function(x) x / sum(x))
+norm_m12  <- norm_m12 + 1
+norm_m12  <- t(transform(t(norm_m12), transform = 'clr', target = 'sample'))
+
+norm_m18  <- apply(class_m18, 2, function(x) x / sum(x))
+norm_m18  <- norm_m18 + 1
+norm_m18  <- t(transform(t(norm_m18), transform = 'clr', target = 'sample'))
 
 
 
