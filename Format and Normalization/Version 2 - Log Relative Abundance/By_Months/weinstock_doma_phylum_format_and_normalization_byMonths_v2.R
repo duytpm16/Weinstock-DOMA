@@ -1,7 +1,6 @@
 ### Options and libraries
 options(stringsAsFactors = FALSE)
 library(qtl2convert)
-library(microbiome)
 library(tidyverse)
 library(qtl2)
 
