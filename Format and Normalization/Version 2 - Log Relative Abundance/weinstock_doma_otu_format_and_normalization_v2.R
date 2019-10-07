@@ -2,8 +2,11 @@
 options(stringsAsFactors = FALSE)
 library(qtl2convert)
 library(tidyverse)
-library(DESeq2)
 library(qtl2)
+
+
+
+
 
 
 
@@ -12,8 +15,23 @@ library(qtl2)
 load('~/Desktop/Weinstock_DOMA/Genotypes/DODB/qtl2/JAC_megaMUGA_genoprobs_qtl2.RData')
 samples <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/DO_CrossSectional_Population.csv')
 chrY_M  <- read.csv('~/Desktop/Weinstock_DOMA/Phenotypes/do_mice/JAC_crosssectional_sex_chrM_Y_20180618.csv')
-otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_raw_count_cleaned_filtered.rds')
-taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/otu_taxa_table_0.5_cleaned_filtered.rds')
+otu  <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/otu_raw_count_0.5_cleaned.rds')
+taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/0.5/otu_taxa_table_0.5_cleaned.rds')
+
+
+
+
+
+
+
+
+
+### Removing OTUs with <= 5% prevalence according to Hoan
+#     otu: 403 x 384
+otu  <- otu[, colSums(otu > 0) > (nrow(otu) * 0.05)]
+taxa <- taxa %>% 
+          filter(OTU %in% colnames(otu))
+
 
 
 
@@ -39,24 +57,21 @@ samples <- samples %>%
 
 
 
-### Normalize OTU by Hoan's pipeline.
+### Normalize OTU using Hoan / Dong-binh's code
+codaSeq.clr <- function(x, samples.by.row=TRUE){
+  
+  if(min(x) == 0) stop("0 values must be replaced, estimated, or eliminated")
+  if(samples.by.row == TRUE){margin=1}
+  if(samples.by.row == FALSE){margin=2}
+
+  return ( t(apply(x, margin, function(x){log(x) - mean(log(x))})) )
+}
 norm <- apply(otu, 2, function(x) x / sum(x))
-norm <- log(norm + 1)
+norm <- norm + 1
+norm <- codaSeq.clr(x = norm, samples.by.row = TRUE)
 
 
 
-
-
-
-
-### Rank Z transformation function
-rankZ = function(x) {
-  x = rank(x, na.last = "keep", ties.method = "average") / (sum(!is.na(x)) + 1)
-  return(qnorm(x))
-} # rankZ()
-
-
-rz <- apply(norm,  2, rankZ)
 
 
 
@@ -88,6 +103,9 @@ covar.info <- data.frame(sample.column = c('sex', 'cohort.age', 'generation'),
 
 
 
+
+
+
 ### Annotate columns
 annot.phenotype <- data.frame(data.name   = c(colnames(samples), taxa$OTU),
                               short.name  = c(colnames(samples), taxa$OTU),
@@ -109,7 +127,15 @@ annot.phenotype <- data.frame(data.name   = c(colnames(samples), taxa$OTU),
                               is.derived  = FALSE,
                               omit        = FALSE,
                               use.covar   = c(rep(NA, ncol(samples)), rep('sex:cohort.age:generation', nrow(taxa))),
-                              transformation = c(rep(NA, ncol(samples)), rep('log', nrow(taxa))))
+                              transformation = c(rep(NA, ncol(samples)), rep('rankz', nrow(taxa))))
+
+
+
+
+
+
+
+
 
 
 
@@ -120,7 +146,7 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
                          annot.samples   = as_tibble(samples),
                          covar.matrix    = as.matrix(covar),
                          covar.info      = as_tibble(covar.info),
-                         data            = list(norm  = as.matrix(norm),
+                         data            = list(norm = as.matrix(norm),
                                                 raw  = as.matrix(otu)),
                          datatype        = 'phenotype',
                          display.name    = 'DOMA OTU Abundance',
@@ -132,8 +158,10 @@ dataset.doma.otu <- list(annot.phenotype = as_tibble(annot.phenotype),
 
 
 
-### Map as dataframe
+
+### Markers as tibble
 markers <- as_tibble(markers)
+
 
 
 
@@ -145,7 +173,11 @@ markers <- as_tibble(markers)
 genoprobs <- probs_qtl2_to_doqtl(probs = genoprobs)
 genoprobs <- genoprobs[dimnames(genoprobs)[[1]] %in% samples$mouse.id,,]
 genoprobs <- probs_doqtl_to_qtl2(probs = genoprobs, map = as.data.frame(markers), marker_column = 'marker.id', pos_column = 'pos')
+
 K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
+
+
+
 
 
 
@@ -154,5 +186,4 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 
 ### Save
 rm(list = ls()[!grepl('dataset[.]|K|map|markers|genoprobs', ls())])
-save.image(file = 'weinstock_doma_viewer_v2.Rdata')
-
+save.image(file = '~/Desktop/Weinstock_DOMA/Viewer/Version 2 - Centered Log Ratio/weinstock_doma_viewer_v2.Rdata')
