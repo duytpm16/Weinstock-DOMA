@@ -2,7 +2,6 @@
 options(stringsAsFactors = FALSE)
 library(qtl2convert)
 library(tidyverse)
-library(DESeq2)
 library(qtl2)
 
 
