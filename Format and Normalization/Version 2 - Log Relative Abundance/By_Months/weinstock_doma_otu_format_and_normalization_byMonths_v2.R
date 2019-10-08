@@ -26,7 +26,7 @@ taxa <- readRDS('~/Desktop/Weinstock_DOMA/Phenotypes/doma_otu_16s_data/Modified/
 
 ### Divide samples into motnhs
 weeks <- split(samples, samples$Cohort.Age)
-            
+
 
 
 
@@ -68,13 +68,13 @@ norm_m6  <- apply(otu_m6, 2, function(x) x / sum(x))
 norm_m6  <- norm_m6 + 1
 norm_m6  <- codaSeq.clr(x = norm_m6, samples.by.row = TRUE)
 
-norm_m12  <- apply(otu_m12, 2, function(x) x / sum(x))
-norm_m12  <- norm_m12 + 1
-norm_m12 <- t(transform(t(norm_m12), transform = 'clr', target = 'sample'))
+norm_m12 <- apply(otu_m12, 2, function(x) x / sum(x))
+norm_m12 <- norm_m12 + 1
+norm_m12 <- codaSeq.clr(x = norm_m12, samples.by.row = TRUE)
 
-norm_m18  <- apply(otu_m18, 2, function(x) x / sum(x))
-norm_m18  <- norm_m18 + 1
-norm_m18 <- t(transform(t(norm_m18), transform = 'clr', target = 'sample'))
+norm_m18 <- apply(otu_m18, 2, function(x) x / sum(x))
+norm_m18 <- norm_m18 + 1
+norm_m18 <- codaSeq.clr(x = norm_m18, samples.by.row = TRUE)
 
 
 
@@ -253,3 +253,7 @@ K <- calc_kinship(probs = genoprobs, type = 'loco', cores = 0)
 ### Save
 rm(list = ls()[!grepl('dataset[.]|K|map|markers|genoprobs', ls())])
 save.image(file = '~/Desktop/Weinstock_DOMA/Viewer/Version 2 - Centered Log Ratio/weinstock_doma_by_months_viewer_v2.Rdata')
+
+
+
+
