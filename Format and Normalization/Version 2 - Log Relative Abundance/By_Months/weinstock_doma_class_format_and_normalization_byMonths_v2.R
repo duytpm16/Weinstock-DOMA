@@ -118,8 +118,7 @@ samples_m18 <- samples %>% filter(mouse.id %in% rownames(class_m18))
 
 
 ### Covariates
-covar <- model.matrix(~ sex + generation + cohort.age, data = samples)[, -1, drop = FALSE]
-covar <- covar[,c('sexM', 'cohort.age', grep('generation', colnames(covar), value = TRUE))]
+covar <- model.matrix(~ sex + generation, data = samples)[, -1, drop = FALSE]
 colnames(covar)[1] <- 'sex'
 rownames(covar) <- samples$mouse.id
 
@@ -129,12 +128,12 @@ covar_m18 <- covar[rownames(covar) %in% rownames(class_m18),]
 
 
 
-covar.info <- data.frame(sample.column = c('sex', 'cohort.age', 'generation'),
-                         covar.column  = c('sex', 'cohort.age', 'generation'),
-                         display.name  = c('Sex', 'Cohort Age', 'Generation'),
-                         interactive   = c(TRUE, TRUE, FALSE),
-                         primary       = c(TRUE, TRUE, FALSE),
-                         lod.peaks     = c('sex_int', 'age_int', NA))
+covar.info <- data.frame(sample.column = c('sex', 'generation'),
+                         covar.column  = c('sex', 'generation'),
+                         display.name  = c('Sex', 'Generation'),
+                         interactive   = c(TRUE, FALSE),
+                         primary       = c(TRUE, FALSE),
+                         lod.peaks     = c('sex_int', NA))
 
 
 
