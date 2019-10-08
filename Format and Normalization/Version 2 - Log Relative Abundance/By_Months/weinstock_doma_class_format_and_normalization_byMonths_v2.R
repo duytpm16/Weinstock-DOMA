@@ -68,13 +68,13 @@ norm_m6  <- apply(class_m6, 2, function(x) x / sum(x))
 norm_m6  <- norm_m6 + 1
 norm_m6  <- codaSeq.clr(x = norm_m6, samples.by.row = TRUE)
 
-norm_m12  <- apply(class_m12, 2, function(x) x / sum(x))
-norm_m12  <- norm_m12 + 1
-norm_m12  <- t(transform(t(norm_m12), transform = 'clr', target = 'sample'))
+norm_m12 <- apply(class_m12, 2, function(x) x / sum(x))
+norm_m12 <- norm_m12 + 1
+norm_m12 <- codaSeq.clr(x = norm_m12, samples.by.row = TRUE)
 
-norm_m18  <- apply(class_m18, 2, function(x) x / sum(x))
-norm_m18  <- norm_m18 + 1
-norm_m18  <- t(transform(t(norm_m18), transform = 'clr', target = 'sample'))
+norm_m18 <- apply(class_m18, 2, function(x) x / sum(x))
+norm_m18 <- norm_m18 + 1
+norm_m18 <- codaSeq.clr(x = norm_m18, samples.by.row = TRUE)
 
 
 
