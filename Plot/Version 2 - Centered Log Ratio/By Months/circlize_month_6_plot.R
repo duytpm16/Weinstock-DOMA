@@ -72,10 +72,10 @@ for(i in paste0('chr', c(1:19,'X'))){
 circos.genomicTrackPlotRegion(genus_m6, track.height = .1, bg.border = NA, panel.fun = function(region, value, ...) {
   circos.genomicPoints(region, value, cex = 1.2, pch = 21, col = 'grey', bg = 'darkseagreen3', ...)
 })
+
 circos.yaxis(side = "left", at = seq(0,24,4), sector.index = 'chr1', labels.cex = .6)
 for(i in paste0('chr', c(1:19,'X'))){
-  
-  circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
+    circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
 }
 
 
@@ -87,10 +87,10 @@ for(i in paste0('chr', c(1:19,'X'))){
 circos.genomicTrackPlotRegion(family_m6, track.height = .1, bg.border = NA,, panel.fun = function(region, value, ...) {
   circos.genomicPoints(region, value, cex = 1.2, pch = 21, col = 'grey', bg = 'firebrick3', ...)
 })
+
 circos.yaxis(side = "left", at = seq(0,12,2), sector.index = 'chr1', labels.cex = .6)
 for(i in paste0('chr', c(1:19,'X'))){
-  
-  circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
+    circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
 }
 
 
@@ -102,10 +102,10 @@ for(i in paste0('chr', c(1:19,'X'))){
 circos.genomicTrackPlotRegion(order_m6, track.height = .1, bg.border = NA, panel.fun = function(region, value, ...) {
   circos.genomicPoints(region, value, cex = 1.2, pch = 21, col = 'grey', bg = 'dodgerblue3', ...)
 })
+
 circos.yaxis(side = "left", at = seq(0,12,1), sector.index = 'chr1', labels.cex = .6)
 for(i in paste0('chr', c(1:19,'X'))){
-  
-  circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
+    circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
 }
 
 
@@ -117,10 +117,10 @@ for(i in paste0('chr', c(1:19,'X'))){
 circos.genomicTrackPlotRegion(class_m6, track.height = .1, bg.border = NA,  panel.fun = function(region, value, ...) {
   circos.genomicPoints(region, value, cex = 1.2, pch = 21, col = 'grey', bg = 'darkorange', ...)
 })
+
 circos.yaxis(side = "left", at = seq(0,12,2), sector.index = 'chr1', labels.cex = .6)
 for(i in paste0('chr', c(1:19,'X'))){
-  
-  circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
+    circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
 }
 
 
@@ -131,10 +131,10 @@ for(i in paste0('chr', c(1:19,'X'))){
 circos.genomicTrackPlotRegion(phylum_m6, track.height = .1, bg.border = NA, panel.fun = function(region, value, ...) {
   circos.genomicPoints(region, value, cex = 1.2, pch = 21, col = 'grey', bg = 'darkorchid3', ...)
 })
+
 circos.yaxis(side = "left", at = seq(0,10,2), sector.index = 'chr1', labels.cex = .6)
 for(i in paste0('chr', c(1:19,'X'))){
-  
-  circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
+    circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
 }
 
 
