@@ -96,7 +96,7 @@ circos.genomicTrackPlotRegion(order_m18, track.height = .1, bg.border = NA, pane
 })
 
 circos.yaxis(side = "left", at = seq(0,12,1), sector.index = 'chr1', labels.cex = .6)
-for(i in paste0('chr', c(1:19,'X'))))
+for(i in paste0('chr', c(1:19,'X'))){
     circos.xaxis(h = 'bottom', sector.index = i, labels = FALSE)
 }
 
