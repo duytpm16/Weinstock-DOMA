@@ -88,7 +88,7 @@ dimnames(genoprobs)[[1]] <- gsub("-", ".", dimnames(genoprobs)[[1]])
 # [10] "Jackson_Laboratory_Churchill_MEGMUGV01_20150116_DO-0409_H2" 
 # [11] "Jackson_Laboratory_MEGMUGV01_20140627_DO-0914_C10"          
 # [12] "Jackson_Laboratory_MEGMUGV01_20140627_DO-0940_B11"
-# This can be done as on line 91 due to the ordering of the samples.
+# This can be done as on line 92 due to the ordering of the samples.
 genoprobs <- genoprobs[!duplicated(dimnames(genoprobs)[[1]]),,]
 
 
